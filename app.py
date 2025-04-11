@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title="足球赛程 - BetsAPI", layout="wide")
 
 # === 配置 ===
-API_KEY = "114914-J5jiCj6s4Hkkmk"  # 更新后的 API Key
+API_KEY = "114914-J5jiCj6s4Hkkmk"  # 使用你提供的 API Token
 TIMEZONE = pytz.timezone("Asia/Shanghai")  # UTC+8
 REFRESH_INTERVAL = 60 * 1000  # 每 60 秒自动刷新（单位：毫秒）
 
@@ -20,7 +20,7 @@ st_autorefresh(interval=REFRESH_INTERVAL, key="auto-refresh")
 
 # === 获取所有比赛 ===
 def get_all_matches(sport_id=1):
-    url = f"https://betsapi.com/api/v1/event/all?sport_id={sport_id}&token={API_KEY}"
+    url = f"https://api.b365api.com/api/v1/event/all?sport_id={sport_id}&token={API_KEY}"  # 使用正确的 API 端点
     try:
         response = requests.get(url)
         response.raise_for_status()  # 如果请求失败，抛出异常
@@ -39,7 +39,7 @@ def get_all_matches(sport_id=1):
 
 # === 获取赔率 ===
 def get_odds(event_id):
-    url = f"https://betsapi.com/api/v1/event/odds?token={API_KEY}&event_id={event_id}"
+    url = f"https://api.b365api.com/api/v1/event/odds?token={API_KEY}&event_id={event_id}"  # 使用正确的 API 端点
     try:
         response = requests.get(url)
         response.raise_for_status()  # 如果请求失败，抛出异常
