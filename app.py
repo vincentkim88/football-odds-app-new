@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title="足球赛程 - BetsAPI", layout="wide")
 
 # === 配置 ===
-API_KEY = "114914-zmAWKLNAHcge1r"
+API_KEY = "114914-J5jiCj6s4Hkkmk"  # 更新后的 API Key
 TIMEZONE = pytz.timezone("Asia/Shanghai")  # UTC+8
 REFRESH_INTERVAL = 60 * 1000  # 每 60 秒自动刷新（单位：毫秒）
 
@@ -31,7 +31,7 @@ def get_all_matches(sport_id=1):
             st.error("未返回比赛数据，请稍后再试")
             return []
     except requests.exceptions.RequestException as e:
-        st.error(f"请求错误: {e}")
+        st.error(f"请求错误: {e} - HTTP 状态码: {response.status_code}")
         return []
     except Exception as e:
         st.error(f"未知错误: {e}")
@@ -50,7 +50,7 @@ def get_odds(event_id):
             st.error("未返回赔率数据，请稍后再试")
             return []
     except requests.exceptions.RequestException as e:
-        st.error(f"请求错误: {e}")
+        st.error(f"请求错误: {e} - HTTP 状态码: {response.status_code}")
         return []
     except Exception as e:
         st.error(f"未知错误: {e}")
