@@ -7,6 +7,9 @@ from streamlit_autorefresh import st_autorefresh
 import pytz
 import matplotlib.pyplot as plt
 
+# === 页面设置：必须放在最前面 ===
+st.set_page_config(page_title="足球赛程 - BetsAPI", layout="wide")
+
 # === 配置 ===
 API_KEY = "114914-zmAWKLNAHcge1r"
 TIMEZONE = pytz.timezone("Asia/Shanghai")  # UTC+8
@@ -152,7 +155,6 @@ def show_odds(event_id):
 
 # === 主函数 ===
 def main():
-    st.set_page_config(page_title="足球赛程 - BetsAPI", layout="wide")
     st.title("⚽ 足球赛程 & 实时赔率展示")
 
     with st.spinner("正在加载比赛数据..."):
