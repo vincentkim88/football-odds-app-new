@@ -21,20 +21,40 @@ st_autorefresh(interval=REFRESH_INTERVAL, key="auto-refresh")
 # === 获取所有比赛 ===
 def get_all_matches(sport_id=1):
     url = f"https://betsapi.com/api/v1/event/all?sport_id={sport_id}&token={API_KEY}"
-    response = requests.get(url)
-    if response.status_code == 200:
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # 如果请求失败，抛出异常
         data = response.json()
-        return data.get("results", [])
-    return []
+        if "results" in data:
+            return data["results"]
+        else:
+            st.error("未返回比赛数据，请稍后再试")
+            return []
+    except requests.exceptions.RequestException as e:
+        st.error(f"请求错误: {e}")
+        return []
+    except Exception as e:
+        st.error(f"未知错误: {e}")
+        return []
 
 # === 获取赔率 ===
 def get_odds(event_id):
     url = f"https://betsapi.com/api/v1/event/odds?token={API_KEY}&event_id={event_id}"
-    response = requests.get(url)
-    if response.status_code == 200:
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # 如果请求失败，抛出异常
         data = response.json()
-        return data.get("results", [])
-    return []
+        if "results" in data:
+            return data["results"]
+        else:
+            st.error("未返回赔率数据，请稍后再试")
+            return []
+    except requests.exceptions.RequestException as e:
+        st.error(f"请求错误: {e}")
+        return []
+    except Exception as e:
+        st.error(f"未知错误: {e}")
+        return []
 
 # === 筛选公平盘口 ===
 def is_fair_handicap_ah(value):
