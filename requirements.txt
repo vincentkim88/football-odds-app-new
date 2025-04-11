@@ -1,6 +1,0 @@
-streamlit
-requests
-pandas
-pytz
-matplotlib
-streamlit-autorefresh
