@@ -6,12 +6,13 @@ from datetime import datetime, timedelta
 from streamlit_autorefresh import st_autorefresh
 import pytz
 import matplotlib.pyplot as plt
+import time
 
 # === 页面设置：必须放在最前面 ===
 st.set_page_config(page_title="足球赛程 - BetsAPI", layout="wide")
 
 # === 配置 ===
-API_KEY = "114914-J5jiCj6s4Hkkmk"  # 使用你提供的 API Token
+API_KEY = "114914-62iJQRsjtnRKLJ"  # 更新为新的 API Token
 TIMEZONE = pytz.timezone("Asia/Shanghai")  # UTC+8
 REFRESH_INTERVAL = 60 * 1000  # 每 60 秒自动刷新（单位：毫秒）
 
@@ -23,6 +24,16 @@ def get_all_matches(sport_id=1):
     url = f"https://api.b365api.com/api/v1/event/all?sport_id={sport_id}&token={API_KEY}"  # 使用正确的 API 端点
     try:
         response = requests.get(url)
+        # 检查限速头部信息
+        rate_limit = int(response.headers.get("X-RateLimit-Remaining", 0))
+        rate_reset = int(response.headers.get("X-RateLimit-Reset", time.time()))  # 获取重置时间
+
+        if rate_limit <= 0:
+            # 如果剩余请求数为0，等待直到重置时间
+            sleep_time = rate_reset - time.time()
+            st.info(f"API 请求限制达到，每小时最多 3600 次，请等待 {sleep_time:.2f} 秒重置。")
+            time.sleep(sleep_time)
+
         response.raise_for_status()  # 如果请求失败，抛出异常
         data = response.json()
         if "results" in data:
@@ -42,6 +53,16 @@ def get_odds(event_id):
     url = f"https://api.b365api.com/api/v1/event/odds?token={API_KEY}&event_id={event_id}"  # 使用正确的 API 端点
     try:
         response = requests.get(url)
+        # 检查限速头部信息
+        rate_limit = int(response.headers.get("X-RateLimit-Remaining", 0))
+        rate_reset = int(response.headers.get("X-RateLimit-Reset", time.time()))  # 获取重置时间
+
+        if rate_limit <= 0:
+            # 如果剩余请求数为0，等待直到重置时间
+            sleep_time = rate_reset - time.time()
+            st.info(f"API 请求限制达到，请等待 {sleep_time:.2f} 秒重置。")
+            time.sleep(sleep_time)
+
         response.raise_for_status()  # 如果请求失败，抛出异常
         data = response.json()
         if "results" in data:
